@@ -1,14 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   Platform,
-  TouchableOpacity,
+  FlatList,
+  Keyboard,
 } from 'react-native';
+import {Button} from '../components/Button';
+import {SkillCard} from '../components/SkillCard';
 
 export const Home = () => {
+  const [newSkill, setNewSkill] = useState();
+  const [mySkills, setMySkills] = useState(['JavaScript']);
+
+  function handleAddSkill() {
+    if (!newSkill) {
+      alert("You can't add an empty skill. Please, type a skill name.");
+      return;
+    }
+    setMySkills(skillsList => [...skillsList, newSkill]);
+
+    setNewSkill('');
+    Keyboard.dismiss();
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome, Diogo</Text>
@@ -16,12 +33,19 @@ export const Home = () => {
         style={styles.input}
         placeholder="New skill"
         placeholderTextColor="#555"
+        value={newSkill}
+        onChangeText={setNewSkill}
       />
-      <TouchableOpacity style={styles.button} activeOpacity={0.7}>
-        <Text style={styles.buttonText}>Add</Text>
-      </TouchableOpacity>
+      <Button onPress={handleAddSkill}>Add</Button>
 
-      <Text style={[styles.title, {marginTop: 50}]}>My Skills</Text>
+      <Text style={[styles.title, {marginVertical: 30}]}>My Skills</Text>
+
+      <FlatList
+        data={mySkills}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({item}) => <SkillCard skill={item} />}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 };
@@ -45,17 +69,5 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     padding: Platform.OS === 'ios' ? 15 : 10,
     marginTop: 30,
-  },
-  button: {
-    backgroundColor: '#a370f7',
-    padding: 15,
-    borderRadius: 7,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
   },
 });
