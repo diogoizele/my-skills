@@ -7,6 +7,7 @@ import {
   Platform,
   FlatList,
   Keyboard,
+  StatusBar,
 } from 'react-native';
 import {Button} from '../components/Button';
 import {SkillCard} from '../components/SkillCard';
@@ -43,6 +44,7 @@ export const Home = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" translucent />
       <Text style={styles.title}>Welcome, Diogo</Text>
       <Text style={styles.greetings}>{greetings}</Text>
 
