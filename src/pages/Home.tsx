@@ -10,19 +10,24 @@ import {
   StatusBar,
 } from 'react-native';
 import {Button} from '../components/Button';
-import {SkillCard} from '../components/SkillCard';
+import {SkillCard, SkillProps} from '../components/SkillCard';
 
 export const Home = () => {
-  const [newSkill, setNewSkill] = useState();
-  const [mySkills, setMySkills] = useState(['JavaScript']);
+  const [newSkill, setNewSkill] = useState('');
+  const [mySkills, setMySkills] = useState<SkillProps[]>([]);
   const [greetings, setGreetings] = useState('');
 
   function handleAddSkill() {
+    const data = {
+      id: String(new Date().getTime()),
+      name: newSkill,
+    };
+
     if (!newSkill) {
       alert("You can't add an empty skill. Please, type a skill name.");
       return;
     }
-    setMySkills(skillsList => [...skillsList, newSkill]);
+    setMySkills(skillsList => [...skillsList, data]);
 
     setNewSkill('');
     Keyboard.dismiss();
@@ -61,8 +66,8 @@ export const Home = () => {
 
       <FlatList
         data={mySkills}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({item}) => <SkillCard skill={item} />}
+        keyExtractor={({id}) => id}
+        renderItem={({item}) => <SkillCard {...item} />}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -94,3 +99,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+function alert(arg0: string) {
+  throw new Error('Function not implemented.');
+}
