@@ -1,7 +1,12 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, StyleSheet, Text} from 'react-native';
+import {Animated, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-export const SkillCard = ({skill}) => {
+export interface SkillProps {
+  id: string;
+  name: string;
+}
+
+export const SkillCard = ({id, name}: SkillProps) => {
   const borderAnimatedRef = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -18,9 +23,11 @@ export const SkillCard = ({skill}) => {
   });
 
   return (
-    <Animated.View style={[styles.buttonSkill, {borderColor}]}>
-      <Text style={styles.textSkill}>{skill}</Text>
-    </Animated.View>
+    <TouchableOpacity>
+      <Animated.View style={[styles.buttonSkill, {borderColor}]}>
+        <Text style={styles.textSkill}>{name}</Text>
+      </Animated.View>
+    </TouchableOpacity>
   );
 };
 
