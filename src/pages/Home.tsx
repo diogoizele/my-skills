@@ -8,13 +8,19 @@ import {
   FlatList,
   Keyboard,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {Button} from '../components/Button';
-import {SkillCard, SkillProps} from '../components/SkillCard';
+import {SkillCard} from '../components/SkillCard';
+
+interface SkillData {
+  id: string;
+  name: string;
+}
 
 export const Home = () => {
   const [newSkill, setNewSkill] = useState('');
-  const [mySkills, setMySkills] = useState<SkillProps[]>([]);
+  const [mySkills, setMySkills] = useState<SkillData[]>([]);
   const [greetings, setGreetings] = useState('');
 
   function handleAddSkill() {
@@ -24,13 +30,17 @@ export const Home = () => {
     };
 
     if (!newSkill) {
-      alert("You can't add an empty skill. Please, type a skill name.");
+      Alert.alert("You can't add an empty skill. Please, type a skill name.");
       return;
     }
     setMySkills(skillsList => [...skillsList, data]);
 
     setNewSkill('');
     Keyboard.dismiss();
+  }
+
+  function handleRemoveSkill(id: string) {
+    setMySkills(skillsList => skillsList.filter(skill => skill.id !== id));
   }
 
   useEffect(() => {
@@ -60,14 +70,16 @@ export const Home = () => {
         value={newSkill}
         onChangeText={setNewSkill}
       />
-      <Button onPress={handleAddSkill}>Add</Button>
+      <Button title="Add" onPress={handleAddSkill} />
 
       <Text style={[styles.title, {marginVertical: 30}]}>My Skills</Text>
 
       <FlatList
         data={mySkills}
         keyExtractor={({id}) => id}
-        renderItem={({item}) => <SkillCard {...item} />}
+        renderItem={({item}) => (
+          <SkillCard {...item} onPress={() => handleRemoveSkill(item.id)} />
+        )}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -99,6 +111,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-function alert(arg0: string) {
-  throw new Error('Function not implemented.');
-}
