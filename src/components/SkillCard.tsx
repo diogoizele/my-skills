@@ -1,12 +1,18 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from 'react-native';
 
-export interface SkillProps {
+export interface SkillCardProps extends TouchableOpacityProps {
   id: string;
   name: string;
 }
 
-export const SkillCard = ({id, name}: SkillProps) => {
+export const SkillCard = ({name, ...rest}: SkillCardProps) => {
   const borderAnimatedRef = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -23,7 +29,7 @@ export const SkillCard = ({id, name}: SkillProps) => {
   });
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity {...rest}>
       <Animated.View style={[styles.buttonSkill, {borderColor}]}>
         <Text style={styles.textSkill}>{name}</Text>
       </Animated.View>
